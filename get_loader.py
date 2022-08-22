@@ -80,4 +80,59 @@ class FlickrDataset(Dataset):
         return img, torch.tensor(numericalized_caption)
 
 
+# padding the images to be of the same length
+class MyCollate:
+    def __init__(self, pad_index):
+        self.pad_index = pad_index
 
+    def __call__(self, batch):
+        images = [item[0].unsqueeze(0) for item in batch]
+        images = torch.cat(images, dim=0)
+        targets = [item[1] for item in batch]
+        targets = pad_sequence(targets, batch_first=False, padding_value=self.pad_index)
+
+        return images, targets
+
+
+def get_loader(
+        root_folder,
+        annotation_file,
+        transform,
+        batch_size=32,
+        num_workers=8,
+        shuffle=True,
+        pin_memory=True,
+
+):
+    dataset = FlickrDataset(root_folder, annotation_file, transform=transform)
+
+    pad_index = dataset.vocab.stoi["<PAD>"]
+
+    loader = DataLoader(
+        dataset=dataset,
+        batch_size=batch_size,
+        num_workers=num_workers,
+        shuffle=shuffle,
+        pin_memory=pin_memory,
+        collate_fn=MyCollate(pad_index=pad_index),
+    )
+    return loader
+
+
+def main():
+    transform = transforms.Compose(
+        [
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+        ]
+    )
+    dataloader = get_loader("flickr8K/images/",
+                            annotation_file="flickr8k/captions.txt",
+                            transform=transform)
+    for index, (images, captions) in enumerate(dataloader):
+        print(images.shape)
+        print(captions.shape)
+
+
+if __name__ == "__main__":
+    main()
