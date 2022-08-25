@@ -8,7 +8,9 @@ from utils import save_checkpoint, load_checkpoint, print_examples
 from get_loader import get_loader
 from model import CNNtoRNN
 
-def train():
+def train():   # Default Train function for training the model
+   
+    #transform function for standization
     transform = transforms.Compose(
         [
             transforms.Resize((356, 356)),
@@ -17,3 +19,10 @@ def train():
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ]
     )
+
+    train_loader, dataset = get_loader(
+        root_folder="flickr8k/images",
+        annotation_file="flickr8k/captions.txt",
+        transform=transform,
+        num_workers=2,   # we can use more workers if we have a multi-thread CPU
+        )
