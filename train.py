@@ -26,3 +26,21 @@ def train():   # Default Train function for training the model
         transform=transform,
         num_workers=2,   # we can use more workers if we have a multi-thread CPU
         )
+    #Pytorch device GPU check and Modeal save and loading parameters    
+    torch.backends.cudnn.benchmark = True
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    load_model = False
+    save_model = False
+    train_CNN = False
+
+    # Hyperparameters
+    embed_size = 256
+    hidden_size = 256
+    vocab_size = len(dataset.vocab)
+    num_layers = 1
+    learning_rate = 3e-4
+    num_epochs = 100
+
+    # for tensorboard
+    writer = SummaryWriter("runs/flickr")
+    step = 0
