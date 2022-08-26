@@ -12,7 +12,13 @@ spacy_eng = English()
 class Vocabulary:
     def __init__(self, freq_threshold):
         self.itos = {0: "<PAD>", 1: "<SOS>", 2: "<EOS>", 3: "<UNK>"}
-	@@ -24,21 +34,21 @@ def tokenizer_eng(text):
+        self.stoi = {"<PAD>": 0, "<SOS>": 1, "<EOS>": 2, "<UNK>": 3}
+        self.freq_threshold = freq_threshold
+    def __len__(self):
+        return len(self.itos)
+    @staticmethod
+    def tokenizer_eng(text):
+        return [tok.text.lower() for tok in spacy_eng.tokenizer(text)]
 
     def build_vocabulary(self, sentence_list):
         frequencies = {}
@@ -34,7 +40,8 @@ class Vocabulary:
     def numericalize(self, text):
         tokenized_text = self.tokenizer_eng(text)
 
-	@@ -47,18 +57,18 @@ def numericalize(self, text):
+        return [
+            self.stoi[token] if token in self.stoi else self.stoi["<UNK>"]
             for token in tokenized_text
         ]
 
@@ -53,7 +60,17 @@ class FlickrDataset(Dataset):
         self.vocab = Vocabulary(freq_threshold)
         self.vocab.build_vocabulary(self.captions.tolist())
 
-	@@ -80,59 +90,53 @@ def __getitem__(self, index):
+    def __len__(self):
+        return len(self.df)
+    def __getitem__(self, index):
+        caption = self.captions[index]
+        img_id = self.imgs[index]
+        img = Image.open(os.path.join(self.root_dir, img_id)).convert("RGB")
+        if self.transform is not None:
+            img = self.transform(img)
+        numericalized_caption = [self.vocab.stoi["<SOS>"]]
+        numericalized_caption += self.vocab.numericalize(caption)
+        numericalized_caption.append(self.vocab.stoi["<EOS>"])
         return img, torch.tensor(numericalized_caption)
 
 
