@@ -2,6 +2,7 @@ import torch
 from tqdm import tqdm
 import torch.nn as nn
 import torch.optim as optim
+from torchmetrics import Accuracy
 import torchvision.transforms as transforms
 from torch.utils.tensorboard import SummaryWriter
 from utils import save_checkpoint, load_checkpoint, print_examples
@@ -27,16 +28,16 @@ def train():
 
     torch.backends.cudnn.benchmark = True
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    load_model = True
+    load_model = False
     save_model = True
-    train_CNN = False
+    train_CNN = True
 
     # Hyperparameters
     embed_size = 256
     hidden_size = 256
     vocab_size = len(dataset.vocab)
-    num_layers = 1
-    learning_rate = 3e-4
+    num_layers =50
+    learning_rate = 1e-2
     num_epochs = 10
 
     # for tensorboard
@@ -84,10 +85,10 @@ def train():
                 outputs.reshape(-1, outputs.shape[2]), captions.reshape(-1)
             )
             
-            pred = (outputs > 0.5).type(torch.FloatTensor)
-            correct = (pred).type(torch.FloatTensor)
-            Acc = float(torch.mean(correct))
+            accuracy = Accuracy().to(device)
+            Acc = accuracy(outputs.reshape(-1, outputs.shape[2]), captions.reshape(-1))
             acc_list.append(Acc)
+
             print("Accuracy:" +str(Acc))
             print("\n Loss:" +str(loss.item()))
             writer.add_scalar("Training loss", loss.item(), global_step=step)
