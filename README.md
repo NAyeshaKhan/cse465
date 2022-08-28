@@ -12,7 +12,7 @@ Download the Model Checkpoints [Gdrive_Link](https://drive.google.com/file/d/1H7
 - Set images folder, captions.txt inside a folder Flickr8k.
 - train.py: For training the CNN model.
 - model.py: creating the encoderCNN, decoderRNN model and combine them together into one model. 
-- get_loader.py: Loading the data, creating vocabulary for training, testing and evluation.
+- get_loader.py: Loading the data, creating vocabulary for training, testing and evaluation.
 - utils.py: Load model, save model, printing few test cases to evaluate the model.
 - test.py: for testing the model with some example test images
 
