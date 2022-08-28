@@ -24,8 +24,8 @@ def load_checkpoint(checkpoint, model, optimizer):
 
 
 test_loader, dataset = get_loader(
-    root_folder="data/flickr8k/images",
-    annotation_file="data/flickr8k/captions.txt",
+    root_folder="data/images",
+    annotation_file="data/captions.txt",
     transform=transform,
     num_workers=2,
 )
