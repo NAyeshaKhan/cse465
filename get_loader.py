@@ -120,8 +120,8 @@ def main():
             transforms.ToTensor(),
         ]
     )
-    dataloader = get_loader("data/flickr8k/images/",
-                            annotation_file="data/flickr8k/captions.txt",
+    dataloader = get_loader("data/images/",
+                            annotation_file="data/captions.txt",
                             transform=transform)
     for index, (images, captions) in enumerate(dataloader):
         print(images.shape)
