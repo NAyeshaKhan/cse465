@@ -2,9 +2,8 @@
 
 ## Project: Image Captioning Using CNN 
 
-#### Requirements: `Pytorch, Torch Vision, Spacy, Tensorboard, PIL, TQDM`
+#### Requirements: `Pytorch, Torch Vision, Spacy, Tensorboard, PIL, TQDM`, python -m spacy download en
 
-python -m spacy download en
 Download the dataset: [link](https://www.kaggle.com/dataset/e1cd22253a9b23b073794872bf565648ddbe4f17e7fa9e74766ad3707141adeb) 
 and put it under `./data` make sure you unzip file folder and rename it from `flicker8k` to `data`
 
