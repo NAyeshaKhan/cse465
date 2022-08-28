@@ -7,7 +7,7 @@
 Download the dataset: [link](https://www.kaggle.com/dataset/e1cd22253a9b23b073794872bf565648ddbe4f17e7fa9e74766ad3707141adeb) 
 and put it under `./data` make sure you unzip file folder and rename it from `flicker8k` to `data`
 
-Download the Model Checkpoints [Gdrive_Link] (https://drive.google.com/file/d/1H7YoXvwz_n9V-891MoSLIwogOX5cmK5N/view) and put it under `./Checkpoint` folder. #3Create an empty folder name checkpoint.
+Download the Model Checkpoints [Gdrive_Link](https://drive.google.com/file/d/1H7YoXvwz_n9V-891MoSLIwogOX5cmK5N/view) and put it under `./Checkpoint` folder. #3Create an empty folder name checkpoint.
 
 - Set images folder, captions.txt inside a folder Flickr8k.
 - train.py: For training the CNN model.
