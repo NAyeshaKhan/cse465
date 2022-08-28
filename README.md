@@ -16,9 +16,14 @@ Download the Model Checkpoints [Gdrive_Link](https://drive.google.com/file/d/1H7
 - utils.py: Load model, save model, printing few test cases to evaluate the model.
 - test.py: for testing the model with some example test images
 
+for running text run this code
+
+python test.py --image_path path_to_image --user_caption caption_user
+
+![Result testing image](test_result.jpg)
+
 #### To Run this Model.
 - ##### Create a folder name `checkpoint`
 - ##### For Training Start running the training script with `python train.py` 
 - ##### For testing run the test.py script for default test images 
 - ##### Use test.ipynb notebook to test the model and play with it.
-
