@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import torch
+import cv2
 import argparse
 import torch.optim as optim
 from model import CNNtoRNN
@@ -23,8 +24,8 @@ def load_checkpoint(checkpoint, model, optimizer):
 
 
 test_loader, dataset = get_loader(
-    root_folder="data/images",
-    annotation_file="data/captions.txt",
+    root_folder="data/flickr8k/images",
+    annotation_file="data/flickr8k/captions.txt",
     transform=transform,
     num_workers=2,
 )
@@ -32,7 +33,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = CNNtoRNN(256, 256, len(dataset.vocab), 1).to(device)
 optimizer = optim.Adam(model.parameters(), lr=3e-4)
-checkpoint = load_checkpoint(torch.load("checkpoint/model_checkpoint.pth.tar"), model, optimizer)
+checkpoint = load_checkpoint(torch.load("checkpoint/model_checkpoint.pth.tar", map_location=device), model, optimizer)
 model.eval()
 
 # hard-Coded Testing per Single image
@@ -50,3 +51,23 @@ test_img1 = transform(Image.open(user_args.image_path).convert("RGB")).unsqueeze
 print("Example 1 CORRECT: "+user_args.user_caption)
 print("Example 1 OUTPUT: "+ " ".join(model.caption_image(test_img1.to(device),dataset.vocab)))
 
+predicted_caption = " ".join(model.caption_image(test_img1.to(device),dataset.vocab))
+
+print(user_args.image_path)
+print(" ".join(model.caption_image(test_img1.to(device),dataset.vocab)))
+
+path = user_args.image_path
+image = cv2.imread(path)
+window_name = 'Display Caption on  Image'
+font = cv2.FONT_HERSHEY_SIMPLEX
+org = (50, 50)
+fontScale = 1
+#color Code B, G, R
+color = (255, 0, 0)
+thickness = 2
+
+image = cv2.putText(image, predicted_caption, org, font,fontScale, color, thickness, cv2.LINE_AA)
+# cv2.imshow(window_name, image)
+
+# Saving the new image
+cv2.imwrite("tes_result.jpg", image)
