@@ -15,7 +15,9 @@ and put it under `./data` make sure you unzip file folder and rename it from `fl
 - utils.py: Load model, save model, printing few test cases to evaluate the model.
 - test.py: for testing the model with some example test images
 
-
-#### Usage: For Training Start running the training script with `python train.py` 
-#### Usage: Use test.ipynb notebook to test the model and play with it.
+#### To Run this Model.
+- ##### Create a folder name `checkpoint`
+- ##### For Training Start running the training script with `python train.py` 
+- ##### For testing run the test.py script for default test images 
+- ##### Use test.ipynb notebook to test the model and play with it.
 
