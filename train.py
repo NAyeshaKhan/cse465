@@ -8,7 +8,6 @@ from utils import save_checkpoint, load_checkpoint, print_examples
 from get_loader import get_loader
 from model import CNNtoRNN
 
-
 def train():
     transform = transforms.Compose(
         [
@@ -28,7 +27,7 @@ def train():
 
     torch.backends.cudnn.benchmark = True
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    load_model = False
+    load_model = True
     save_model = True
     train_CNN = False
 
@@ -38,7 +37,7 @@ def train():
     vocab_size = len(dataset.vocab)
     num_layers = 1
     learning_rate = 3e-4
-    num_epochs = 5
+    num_epochs = 10
 
     # for tensorboard
     writer = SummaryWriter("runs/flickr")
@@ -61,6 +60,7 @@ def train():
 
     model.train()
 
+    acc_list = []
     for epoch in range(num_epochs):
         # Uncomment the line below to see a couple of test cases
         print_examples(model, device, dataset)
@@ -83,8 +83,15 @@ def train():
             loss = criterion(
                 outputs.reshape(-1, outputs.shape[2]), captions.reshape(-1)
             )
-
+            
+            pred = (outputs > 0.5).type(torch.FloatTensor)
+            correct = (pred).type(torch.FloatTensor)
+            Acc = float(torch.mean(correct))
+            acc_list.append(Acc)
+            print("Accuracy:" +str(Acc))
+            print("\n Loss:" +str(loss.item()))
             writer.add_scalar("Training loss", loss.item(), global_step=step)
+            writer.add_scalar("Training Accuracy", Acc, global_step=step)
             step += 1
 
             optimizer.zero_grad()
