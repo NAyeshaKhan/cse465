@@ -6,7 +6,7 @@ class EncoderCNN(nn.Module):
     def __init__(self, embed_size, train_CNN=False):
         super(EncoderCNN, self).__init__()
         self.train_CNN=train_CNN
-        self.inception=models.inception_v3(pretrained=True, aux_logits=True)
+        self.inception=models.resnet50(pretrained=True)   # Resnet 50
         self.inception.fc=nn.Linear(self.inception.fc.in_features, embed_size) #Removing last CNN layer
         self.relu=nn.ReLU()
         self.dropout=nn.Dropout(0.5)
@@ -47,20 +47,20 @@ class CNNtoRNN(nn.Module):
         return outputs
 
     def caption_image(self, image, vocabulary, max_length=50):
-        result_caption=[]
+        result_caption = []
+        
         with torch.no_grad():
-            x=self.encoderCNN(image).unsqueeze(0)
-            states=None
-            
+            x = self.encoderCNN(image).unsqueeze(0)
+            states = None
+
             for _ in range(max_length):
-                hidden, states= self.decoderRNN.lstm(x,states)
-                output= self.decoderRNN.linear(hidden.unsqueeze(0))
-                predicted=output.argmax(1)
-
+                hiddens, states = self.decoderRNN.lstm(x, states)
+                output = self.decoderRNN.linear(hiddens.squeeze(0))
+                predicted = output.argmax(1)
                 result_caption.append(predicted.item())
-                x=self.decoderRNN.embed(predicted).unsqueeze(0)
+                x = self.decoderRNN.embed(predicted).unsqueeze(0)
 
-                if vocabulary.itos[predicted.item()]=="<EOS>":
+                if vocabulary.itos[predicted.item()] == "<EOS>":
                     break
 
         return [vocabulary.itos[idx] for idx in result_caption]

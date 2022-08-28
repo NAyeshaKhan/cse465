@@ -110,7 +110,7 @@ def get_loader(
         pin_memory=pin_memory,
         collate_fn=MyCollate(pad_index=pad_index),
     )
-    return loader
+    return loader, dataset
 
 
 def main():
@@ -120,8 +120,8 @@ def main():
             transforms.ToTensor(),
         ]
     )
-    dataloader = get_loader("flickr8K/images/",
-                            annotation_file="flickr8k/captions.txt",
+    dataloader = get_loader("data/flickr8k/images/",
+                            annotation_file="data/flickr8k/captions.txt",
                             transform=transform)
     for index, (images, captions) in enumerate(dataloader):
         print(images.shape)
