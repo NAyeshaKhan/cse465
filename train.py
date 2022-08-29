@@ -38,7 +38,7 @@ def train():
     vocab_size = len(dataset.vocab)
     num_layers =50
     learning_rate = 1e-2
-    num_epochs = 10
+    num_epochs = 50
 
     # for tensorboard
     writer = SummaryWriter("runs/flickr")
