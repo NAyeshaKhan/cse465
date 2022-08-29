@@ -21,7 +21,7 @@ for running text run this code
 python test.py --image_path path_to_image --user_caption caption_user
 
 
-<img src="test_result.jpg" alt="Result testing image" width="600"/>
+<img src="test_result2.jpg" alt="Result testing image" width="600"/>
 
 #### To Run this Model.
 - ##### Create a folder name `checkpoint`
